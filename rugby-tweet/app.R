@@ -21,8 +21,8 @@ ui <- navbarPage(
              
              # title and subtitle
     
-    h2("What is the perception of rugby through the United States? 
-       How does that compare to the rest of the world?", align = "center"),
+    h2("What is the perception of rugby through the United States?", align = "center"),
+    h4(em("How does that compare to the rest of the world?"), align = "center"),
     br(),
     div(),
     
