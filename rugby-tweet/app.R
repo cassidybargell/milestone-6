@@ -9,7 +9,6 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
     
     # Application title
@@ -21,14 +20,13 @@ ui <- fluidPage(
     )
 )
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
 
     output$USplot <- renderImage({
         
         list(src = "us_plot.png",
              contentType = 'image/png', 
-             width = 700, 
+             width = 710, 
              height = 500)
     }, deleteFile = FALSE)
 }
