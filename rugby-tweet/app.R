@@ -65,9 +65,7 @@ ui <- navbarPage(
              p("github link ... ")
     ))
     
-    mainPanel( 
-        imageOutput("USplot")
-    )
+
 
 
 server <- function(input, output) {
@@ -91,15 +89,7 @@ server <- function(input, output) {
             map_theme()
         
     })
-    
 
-    output$USplot <- renderImage({
-        
-        list(src = "us_plot.png",
-             contentType = 'image/png', 
-             width = 710, 
-             height = 500)
-    }, deleteFile = FALSE)
 }
 
 # Run the application 
