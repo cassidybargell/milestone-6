@@ -11,6 +11,14 @@ library(shiny)
 library(tidyverse)
 library(shinythemes)
 
+# Create variables for ggplot 
+
+rugby_merged <- read_rds("rugby_merged.RDS")
+
+# Call plot function 
+
+source("map_theme.R")
+
 ui <- navbarPage(
     "Rugby Perceptions",
     theme = shinytheme("darkly"), 
@@ -71,7 +79,6 @@ ui <- navbarPage(
 server <- function(input, output) {
     
     #### DATA
-    
     
     output$plot_rgsearch <- renderPlot({
         ggplot(rugby_merged, aes(x = long, y = lat)) +

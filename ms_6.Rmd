@@ -49,18 +49,28 @@ usa <- lookup_coords(address = "usa", apikey = "88a679312c139a94aa3d3210ef78e8a8
 google_rugby <- gtrends(c("rugby"), geo = c("US"),
                         gprop = "web", time = "all")
 
+
 # Interest by region tibble to plot
 
 rugby_interest_by_region <- as_tibble(google_rugby$interest_by_region)
 rugby_interest_by_region <- rugby_interest_by_region %>% 
   mutate(region = str_to_lower(location))
 
+saveRDS(rugby_interest_by_region, file = "rugby-tweet/rugby_interest_by_region.RDS")
+
 # Create map of US states
 
 
 google_rugby <- gtrends(c("rugby"), geo = c("US"),
                         gprop = "web", time = "all")
+
+saveRDS(google_rugby, file = "rugby-tweet/google_rugby.RDS")
+
 states_map <- ggplot2::map_data("state")
+
+saveRDS(states_map, file = "rugby-tweet/states_map.RDS")
+
+saveRDS(google_rugby)
 
 # Join data
 
@@ -69,7 +79,11 @@ rugby_merged <- rugby_interest_by_region %>% dplyr::left_join(x = .,
                                                             y = states_map, 
                                                             by = "region")
 
+saveRDS(rugby_merged, file = "rugby-tweet/rugby_merged.RDS")
+
 # Create map theme so clean-up is easier
+
+("milestone-6/map_theme.R")
 
 map_theme = function() {
     theme(axis.title = element_blank()) +
