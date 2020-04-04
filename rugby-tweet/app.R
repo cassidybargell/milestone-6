@@ -15,9 +15,7 @@ library(shinythemes)
 
 rugby_merged <- read_rds("rugby_merged.RDS")
 
-# Call plot function 
 
-source("map_theme.R")
 
 ui <- navbarPage(
     "Rugby Perceptions",
@@ -93,7 +91,11 @@ server <- function(input, output) {
                  caption = "Google Trends: Search results are normalized to the time and
        location of a query. Each data point is divided by the total searches of
        the geography and time range it represents to compare relative popularity.") +
-            map_theme()
+            theme(axis.title = element_blank()) +
+            theme(axis.text = element_blank()) +
+            theme(axis.ticks = element_blank()) + 
+            theme(legend.title = element_blank()) +
+            theme(panel.grid.major = element_blank())
         
     })
 
