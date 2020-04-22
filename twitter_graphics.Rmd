@@ -1,0 +1,100 @@
+---
+title: "twitter graphics"
+author: "Cassidy Bargell"
+date: "4/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(rtweet)
+library(httpuv)
+library(gtrendsR)
+library(lubridate)
+library(maps)
+library(pals)
+library(viridis)
+library(scico)
+library(ggrepel)
+library(tidytext)
+data("stop_words")
+```
+
+```{r read in}
+
+# read in RDS files to work with to avoid rate limits on twitter
+
+football <- readRDS("raw-data/football.RDS")
+rugby <- readRDS("raw-data/rugby.RDS")
+nfl_tml <- readRDS("raw-data/nfl_tml.RDS")
+wr_tml <- readRDS("raw-data/wr_tml.RDS")
+sr_tml <- readRDS("raw-data/sr_tml.RDS")
+```
+
+```{r nfl_tml words}
+nfl_tml %>%
+  select(created_at, text, favorite_count, quote_count, retweet_count, reply_count) 
+
+# Remove urls in tweets, and create list of words I want to search the tweets
+# for. Capitalization are recognized separately.
+
+words <- c("Concussion", "concussion", "CTE", "cte", "head", "Head", "Injury", "injury")
+unique(words)
+
+nfl_tml$stripped_text <- gsub("http.*","",  nfl_tml$text)
+nfl_tml$stripped_text <- gsub("https.*","", nfl_tml$stripped_text)
+
+nfl_tml_clean <- nfl_tml %>%
+  select(stripped_text) %>%
+  unnest_tokens(word, stripped_text) 
+
+# Get rid of pre-loaded group of words that have no context
+
+nfl_tml_clean <- nfl_tml_clean %>%
+  anti_join(stop_words, by = "word")
+```
+
+```{r football tweet words}
+football %>%
+  select(created_at, text, favorite_count, quote_count, retweet_count, reply_count) 
+
+# Remove urls in tweets, and create list of words I want to search the tweets
+# for. Capitalization are recognized separately.
+
+football$stripped_text <- gsub("http.*","",  football$text)
+football$stripped_text <- gsub("https.*","", football$stripped_text)
+
+nfl_tml_clean <- nfl_tml %>%
+  select(stripped_text) %>%
+  unnest_tokens(word, stripped_text) 
+
+# Get rid of pre-loaded group of words that have no context
+
+nfl_tml_clean <- nfl_tml_clean %>%
+  anti_join(stop_words, by = "word")
+```
+
+```{r}
+
+# Create function for cleaning the tweet words based on what I did above
+
+tweetclean <- function(tib) {
+
+tib$stripped_text <- gsub("http.*","",  tib$text)
+tib$stripped_text <- gsub("https.*","", tib$stripped_text)
+
+tib_clean <- tib %>%
+  select(stripped_text) %>%
+  unnest_tokens(word, stripped_text) 
+
+tib_clean <- tib_clean %>%
+  anti_join(stop_words, by = "word")
+}
+
+football_clean <- tweetclean(football)
+sr_clean <- tweetclean(sr_tml)
+wr_clean <- tweetclean(wr_tml)
+rugby_clean <- tweetclean(rugby)
+```
+
